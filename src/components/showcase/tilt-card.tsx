@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Sparkles, ExternalLink, Layers, ArrowUpRight } from "lucide-react";
+import { Sparkles, ArrowUpRight, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TiltCardProps {
@@ -12,6 +12,7 @@ interface TiltCardProps {
   tag?: string;
   className?: string;
   href?: string;
+  hrefLabel?: string;
   stats?: { label: string; value: string }[];
 }
 
@@ -22,6 +23,7 @@ export function TiltCard({
   tag = "3D Parallax",
   className,
   href,
+  hrefLabel = "Buka Proyek Live",
   stats,
 }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -68,7 +70,7 @@ export function TiltCard({
           rotateY,
           transformStyle: "preserve-3d",
         }}
-        className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-b from-zinc-900/90 to-zinc-950/90 p-7 backdrop-blur-2xl transition-all duration-200 hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-500/10"
+        className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-b from-zinc-900/90 to-zinc-950/90 p-7 backdrop-blur-2xl transition-all duration-200 hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-500/10 min-h-full"
       >
         {/* Holographic Sheen / Glare */}
         <motion.div
@@ -92,6 +94,7 @@ export function TiltCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-400 transition-colors hover:border-white/30 hover:bg-white/15 hover:text-white"
+                title="Buka Link di Tab Baru"
               >
                 <ArrowUpRight className="h-4 w-4" />
               </a>
@@ -109,20 +112,33 @@ export function TiltCard({
           </div>
         </div>
 
-        {/* Optional Stats Bar */}
-        {stats && stats.length > 0 && (
-          <div
-            style={{ transform: "translateZ(20px)" }}
-            className="relative z-10 mt-6 grid grid-cols-3 gap-2 border-t border-white/10 pt-4"
-          >
-            {stats.map((s, idx) => (
-              <div key={idx} className="flex flex-col">
-                <span className="text-xs text-zinc-500">{s.label}</span>
-                <span className="text-sm font-semibold text-zinc-200">{s.value}</span>
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Optional Stats Bar and Footer Link */}
+        <div style={{ transform: "translateZ(20px)" }} className="relative z-10 mt-6 space-y-4">
+          {stats && stats.length > 0 && (
+            <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-4">
+              {stats.map((s, idx) => (
+                <div key={idx} className="flex flex-col">
+                  <span className="text-xs text-zinc-500">{s.label}</span>
+                  <span className="text-sm font-semibold text-zinc-200">{s.value}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {href && (
+            <div className="pt-2">
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-medium text-indigo-400 hover:text-indigo-300 transition-colors group-hover:translate-x-1 duration-200"
+              >
+                <span>{hrefLabel}</span>
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          )}
+        </div>
       </motion.div>
     </div>
   );

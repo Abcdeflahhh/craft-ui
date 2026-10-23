@@ -10,11 +10,11 @@ import {
 } from "framer-motion";
 import {
   Home,
-  Compass,
-  Palette,
-  Terminal,
+  MousePointer2,
+  Zap,
   Layers,
   Sparkles,
+  User,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -27,12 +27,12 @@ export interface DockItem {
 }
 
 const defaultItems: DockItem[] = [
-  { title: "Home", icon: Home },
-  { title: "Explore", icon: Compass },
-  { title: "Design", icon: Palette },
-  { title: "Components", icon: Layers },
-  { title: "Terminal", icon: Terminal },
-  { title: "Magic", icon: Sparkles },
+  { title: "Home", icon: Home, href: "#hero" },
+  { title: "Spotlight", icon: MousePointer2, href: "#spotlight-section" },
+  { title: "Magnetic", icon: Zap, href: "#magnetic-section" },
+  { title: "Laser & Dock", icon: Layers, href: "#dock-section" },
+  { title: "Shimmer", icon: Sparkles, href: "#shimmer-section" },
+  { title: "Creator Profile", icon: User, href: "#creator-profile" },
 ];
 
 function DockIcon({
@@ -55,18 +55,43 @@ function DockIcon({
 
   const Icon = item.icon;
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (item.onClick) {
+      item.onClick();
+    }
+    if (item.href) {
+      if (item.href.startsWith("#")) {
+        e.preventDefault();
+        const el = document.querySelector(item.href);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  };
+
+  const content = (
+    <motion.div
+      ref={ref}
+      style={{ width, height: width }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={handleClick}
+      className="relative flex items-center justify-center rounded-2xl border border-white/10 bg-zinc-800/90 text-zinc-300 shadow-lg shadow-black/40 backdrop-blur-md transition-colors hover:border-white/30 hover:bg-zinc-700/80 hover:text-white cursor-pointer"
+    >
+      <Icon className="h-1/2 w-1/2 transition-transform duration-200" />
+    </motion.div>
+  );
+
   return (
     <div className="relative">
-      <motion.div
-        ref={ref}
-        style={{ width, height: width }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onClick={item.onClick}
-        className="relative flex items-center justify-center rounded-2xl border border-white/10 bg-zinc-800/90 text-zinc-300 shadow-lg shadow-black/40 backdrop-blur-md transition-colors hover:border-white/30 hover:bg-zinc-700/80 hover:text-white"
-      >
-        <Icon className="h-1/2 w-1/2 transition-transform duration-200" />
-      </motion.div>
+      {item.href && !item.href.startsWith("#") ? (
+        <a href={item.href} target="_blank" rel="noopener noreferrer">
+          {content}
+        </a>
+      ) : (
+        content
+      )}
 
       {/* Tooltip */}
       <AnimatePresence>
@@ -76,7 +101,7 @@ function DockIcon({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-zinc-950/90 px-2.5 py-1 text-[11px] font-medium text-zinc-200 shadow-md backdrop-blur-md"
+            className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-zinc-950/95 px-2.5 py-1 text-[11px] font-medium text-zinc-200 shadow-xl backdrop-blur-md z-30"
           >
             {item.title}
           </motion.div>

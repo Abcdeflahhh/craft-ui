@@ -1,67 +1,121 @@
-# ✦ CraftUI — Modern Micro-Interactions & Bento Registry
+# ✦ CraftUI — Modern Micro-Interactions & Bento Component Registry
 
-> **Created by Aflah** • Mahasiswa IT & Creative Developer  
-> Proyek portofolio eksplorasi desain web interaktif, *vibe coding*, dan *micro-interactions* tingkat lanjut.
+[![Next.js 16](https://img.shields.io/badge/Next.js-16.4.2-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React 19](https://img.shields.io/badge/React-19.3.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-14.x-FF0055?style=for-the-badge&logo=framer&logoColor=white)](https://motion.dev/)
 
----
-
-## 🌟 Tentang Proyek
-
-**CraftUI** adalah platform katalog komponen antarmuka (*UI Playground & Component Registry*) yang dirancang khusus untuk memamerkan interaksi gestur modern, *cursor-driven glow*, dan tata letak Bento Grid yang halus (*60fps*). 
-
-Proyek ini dibangun sebagai wadah portofolio untuk membuktikan keterampilan dalam peran **Design Engineer** / **Frontend Craftsman**, sekaligus menjadi etalase utama karya-karya sebelumnya seperti **BentoFlow**.
+> **Crafted by Aflah Athallah** • Mahasiswa S1 Teknik Informatika (Semester 5) • Cikarang, Bekasi, Jawa Barat  
+> Proyek portofolio eksplorasi *Design Engineering*, *Frontend Craftsmanship*, *micro-interactions 60fps*, dan *vibe coding*.
 
 ---
 
-## 🚀 Fitur Unggulan
+## 🌟 Tentang CraftUI
 
-* **01. Spotlight Bento Cards**: Efek sorot kursor mouse dinamis dengan *real-time color switcher* (Indigo, Emerald, Violet, Cyan).
-* **02. Magnetic Spring Playground**: Interaksi tombol elastis yang ditarik mengikuti arah kursor dengan spring physics.
-* **03. macOS Floating Dock**: Menu navigasi mengambang dengan efek *icon magnification* proporsional dan tooltip halus.
-* **04. Continuous Border Beam**: Kartu dengan garis laser neon berputar tanpa henti menggunakan *conic gradient* murni.
-* **05. 3D Parallax Tilt Card (Showcasing BentoFlow)**: Kartu 3D dengan kalkulasi depth rotasi X/Y dan efek pantulan cahaya (*holographic sheen*).
-* **Interactive Code Viewer Modal**: Fitur 1-click *Copy Code* langsung ke clipboard dengan dynamic toast notification.
-* **Category Filter**: Filter dinamis (Bento, Gestures, Featured Projects).
+**CraftUI** adalah platform katalog komponen antarmuka (*UI Playground & Component Registry*) yang dirancang khusus untuk mendemonstrasikan interaksi gestur tingkat lanjut, efek pencahayaan kursor (*radial spotlight*), tata letak *Bento Grid*, tombol laser & shimmer dinamis, serta fisika *spring animation* sekelas antarmuka macOS dan SaaS modern (Linear / Raycast / Vercel).
+
+Platform ini dibangun sebagai etalase portofolio untuk membuktikan kesiapan teknis dalam peran **Frontend Engineer**, **Design Engineer**, atau **Software Engineering Intern (MSIB)**.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Fitur Unggulan (Core Components)
 
-* **Framework:** [Next.js 16](https://nextjs.org) (App Router)
-* **Library UI:** [React 19](https://react.dev) & TypeScript
-* **Styling:** [Tailwind CSS v4](https://tailwindcss.com)
-* **Animasi:** [Framer Motion](https://motion.dev)
-* **Icons:** [Lucide React](https://lucide.dev)
+1. **01. Spotlight Bento Cards (Cursor-Driven Glow)**
+   * Mengkalkulasi koordinat kursor mouse relatif terhadap *bounding box* kartu.
+   * Multi-color selector real-time: **Indigo**, **Emerald**, **Violet**, dan **Cyan**.
+   * Efek radial spotlight dan border gradient dinamis 60fps.
+
+2. **02. Magnetic Elements Playground (Spring Physics)**
+   * Memanfaatkan *Framer Motion springs* dengan konfigurasi damping & stiffness terkalibrasi.
+   * Elemen ditarik elastis mengikuti tarikan gravitasi kursor pengguna.
+
+3. **03. macOS Floating Dock**
+   * Dock navigasi mengambang ala macOS dengan animasi pembesaran proporsional (*icon magnification*).
+   * Dilengkapi tooltip cerdas dan navigasi halus ke setiap seksi halaman.
+
+4. **04. Continuous Laser Border Beam**
+   * Garis laser neon berputar tanpa henti sepanjang border elemen menggunakan kalkulasi *pure conic-gradient* dan mask background.
+
+5. **05. Shimmer Button & Glow Reflections**
+   * Tombol CTA berdaya tarik tinggi dengan pantulan cahaya berkilau (*shimmer spin*) menggunakan CSS container queries.
+   * Pilihan mood warna dinamis: Purple, Cyan, Emerald, dan Amber.
+
+6. **06. 3D Parallax Tilt Card (Showcasing Real Projects)**
+   * Menghitung offset X/Y pointer untuk rotasi 3D berkedalaman tinggi (*perspective: 1000px*) lengkap dengan efek kilau pantulan cahaya holografik.
+   * Memamerkan karya nyata: **BentoFlow**, **ChromaCraft**, dan **Aplikasi UAS Pemweb 2**.
+
+7. **Interactive Code Viewer Modal**
+   * Fitur 1-click **Copy Code** ke clipboard dengan notifikasi toast dinamis.
+   * Tab switcher: **Component Code (`.tsx`)** vs **Usage Example (`example.tsx`)**.
+   * Tombol **Download TSX File** langsung ke komputer pengguna.
 
 ---
 
-## 💻 Cara Menjalankan di Lokal
+## 🛠️ Tech Stack & Engineering Highlights
 
-1. Clone repositori ini:
-   ```bash
-   git clone <repo-url>
-   cd craft-ui
-   ```
+| Komponen | Spesifikasi & Teknologi |
+| :--- | :--- |
+| **Framework** | [Next.js 16 (App Router)](https://nextjs.org) |
+| **View Library** | [React 19](https://react.dev) |
+| **Language** | [TypeScript](https://www.typescriptlang.org) (Strict Typing) |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com) + Custom Conic Gradients & Glassmorphism |
+| **Physics & Motion** | [Framer Motion](https://motion.dev) (Springs, useMotionValue, useTransform) |
+| **Icons** | [Lucide React](https://lucide.dev) |
 
-2. Install dependency:
-   ```bash
-   npm install
-   ```
+---
 
-3. Jalankan development server:
-   ```bash
-   npm run dev
-   ```
+## 💻 Panduan Menjalankan di Lokal
 
-4. Buka di browser:
-   👉 `http://localhost:3000`
+### 1. Clone repositori
+```bash
+git clone https://github.com/Abcdeflahhh/craft-ui.git
+cd craft-ui
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Jalankan development server
+```bash
+npm run dev
+```
+
+Buka [http://localhost:3000](http://localhost:3000) di browser Anda.
+
+### 4. Build untuk produksi
+```bash
+npm run build
+npm run start
+```
+
+---
+
+## 🎓 Relevansi Akademik & Portofolio (Mahasiswa TI)
+
+Proyek ini merefleksikan penguasaan materi inti perkuliahan dan kriteria magang industri:
+1. **Human-Computer Interaction (HCI / IMK)**: Desain antarmuka berorientasi pengguna, *micro-feedback*, *spring physics*, dan respons visual instan.
+2. **Software Architecture & Clean Code**: Pemisahan yang jelas antara logika data (*component-data.ts*), *showcase presentation*, dan utility modular.
+3. **Modern Web Engineering**: Optimasi Next.js 16 App Router, Client vs Server Components, dan *bundle optimization*.
 
 ---
 
 ## 👨‍💻 Profil Pembuat
 
-* **Nama:** Aflah
-* **Fokus:** Web Design, Micro-Interactions, Full-Stack Frontend, Vibe Coding
-* **Proyek Portofolio Utama:**
-  * **BentoFlow** — Interactive Workflow & Productivity Hub
-  * **CraftUI** — Modern Micro-Interactions & Bento Component Registry
+* **Nama:** Aflah Athallah
+* **Status:** Mahasiswa S1 Teknik Informatika (Semester 5)
+* **Domisili:** Cikarang, Bekasi, Jawa Barat, Indonesia
+* **Status Kerja:** Terbuka untuk kesempatan Magang MSIB / Internship 2025–2026
+* **Kontak & Tautan:**
+  * GitHub: [@Abcdeflahhh](https://github.com/Abcdeflahhh)
+  * LinkedIn: [linkedin.com/in/aflahtamam68](https://linkedin.com/in/aflahtamam68)
+  * Email: [aflahtamamke2@gmail.com](mailto:aflahtamamke2@gmail.com)
+  * Portofolio Utama: [BentoFlow Live](https://bentoflowaflah.vercel.app)
+
+---
+
+## 📝 Lisensi
+
+MIT © 2026 Aflah Athallah.

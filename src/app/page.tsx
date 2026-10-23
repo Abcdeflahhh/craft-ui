@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Sparkles,
   Zap,
@@ -20,27 +20,29 @@ import {
   GraduationCap,
   Briefcase,
   FolderGit2,
+  MapPin,
+  Mail,
+  ArrowUp,
+  Palette,
+  Play,
+  Maximize2,
 } from "lucide-react";
+
 import { SpotlightCard } from "@/components/showcase/spotlight-card";
 import { MagneticButton } from "@/components/showcase/magnetic-button";
 import { FloatingDock } from "@/components/showcase/floating-dock";
 import { BorderBeamCard } from "@/components/showcase/border-beam-card";
 import { TiltCard } from "@/components/showcase/tilt-card";
+import { ShimmerButton } from "@/components/showcase/shimmer-button";
 import { CodeViewerModal } from "@/components/showcase/code-viewer-modal";
 import {
-  spotlightCardCode,
-  magneticButtonCode,
-  floatingDockCode,
-  tiltCardCode,
+  COMPONENT_REGISTRY,
+  ComponentSnippet,
 } from "@/components/showcase/component-data";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -50,27 +52,64 @@ function GithubIcon({ className }: { className?: string }) {
   );
 }
 
+function LinkedinIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     title: string;
     code: string;
+    usageCode?: string;
   }>({
     isOpen: false,
     title: "",
     code: "",
+    usageCode: "",
   });
 
   const [activeGlow, setActiveGlow] = useState<
     "indigo" | "emerald" | "violet" | "amber" | "cyan"
   >("indigo");
 
+  const [shimmerTheme, setShimmerTheme] = useState<
+    "purple" | "cyan" | "emerald" | "amber"
+  >("purple");
+
   const [activeCategory, setActiveCategory] = useState<
-    "all" | "bento" | "gestures" | "projects"
+    "all" | "bento" | "gestures" | "shimmer" | "projects"
   >("all");
 
   const [copiedInstall, setCopiedInstall] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -85,23 +124,53 @@ export default function Home() {
     setTimeout(() => setCopiedInstall(false), 2000);
   };
 
-  const openCodeModal = (title: string, code: string) => {
-    setModalState({ isOpen: true, title, code });
-    showToast(`Viewing code for ${title}`);
+  const openCodeModal = (snippetKey: keyof typeof COMPONENT_REGISTRY) => {
+    const item = COMPONENT_REGISTRY[snippetKey];
+    if (item) {
+      setModalState({
+        isOpen: true,
+        title: item.title,
+        code: item.componentCode,
+        usageCode: item.usageCode,
+      });
+      showToast(`Melihat kode: ${item.title}`);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const shimmerColorMap = {
+    purple: "#c084fc",
+    cyan: "#22d3ee",
+    emerald: "#34d399",
+    amber: "#fbbf24",
   };
 
   return (
     <div className="relative min-h-screen bg-[#09090b] text-zinc-100 selection:bg-indigo-500 selection:text-white">
       {/* Dynamic Background Patterns */}
       <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-60" />
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[450px] w-[850px] rounded-full bg-gradient-to-b from-indigo-500/20 via-purple-500/10 to-transparent blur-[140px]" />
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-[950px] rounded-full bg-gradient-to-b from-indigo-500/20 via-purple-500/10 to-transparent blur-[140px]" />
 
       {/* Floating Dynamic Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-2 rounded-full border border-indigo-500/30 bg-zinc-900/90 px-4 py-2 text-xs font-medium text-white shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom-3 duration-200">
+        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-2 rounded-full border border-indigo-500/30 bg-zinc-900/95 px-4 py-2 text-xs font-medium text-white shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom-3 duration-200">
           <CheckCircle2 className="h-4 w-4 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
+      )}
+
+      {/* Floating Back to Top Button */}
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-zinc-900/80 text-zinc-300 shadow-xl backdrop-blur-lg transition-all hover:scale-110 hover:border-white/30 hover:bg-zinc-800 hover:text-white"
+          title="Kembali ke atas"
+        >
+          <ArrowUp className="h-4 w-4" />
+        </button>
       )}
 
       {/* Code Viewer Modal */}
@@ -110,31 +179,35 @@ export default function Home() {
         onClose={() => setModalState((prev) => ({ ...prev, isOpen: false }))}
         title={modalState.title}
         code={modalState.code}
+        usageCode={modalState.usageCode}
       />
 
       {/* Header Navigation */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/75 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-zinc-950/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/25">
+          <a href="#hero" className="flex items-center gap-3 group">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
               ✦
             </span>
             <div className="flex items-baseline gap-2">
-              <span className="text-lg font-bold tracking-tight text-white">
+              <span className="text-lg font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">
                 CraftUI
               </span>
               <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2 py-0.5 text-[10px] font-semibold text-indigo-400">
-                v1.2
+                v1.5 Final
               </span>
             </div>
-          </div>
+          </a>
 
           <div className="flex items-center gap-3 text-xs">
             {/* Creator Badge */}
-            <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-emerald-300">
+            <a
+              href="#creator-profile"
+              className="hidden md:flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-emerald-300 hover:bg-emerald-500/15 transition-colors"
+            >
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-medium">Created by Aflah (Mahasiswa IT)</span>
-            </div>
+              <span className="font-medium">Aflah Athallah • Sem 5 TI</span>
+            </a>
 
             <MagneticButton>
               <a
@@ -149,12 +222,12 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto max-w-6xl px-6 pb-36 pt-12 sm:pt-20">
+      <main id="hero" className="relative z-10 mx-auto max-w-6xl px-6 pb-36 pt-12 sm:pt-20">
         {/* Hero Section */}
         <div className="flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 text-xs text-zinc-300 backdrop-blur-md">
             <Flame className="h-3.5 w-3.5 text-amber-400" />
-            <span>Portofolio Eksplorasi Desain Web & Vibe Coding</span>
+            <span>Portofolio Desain Rekayasa Antarmuka & Vibe Coding</span>
           </div>
 
           <h1 className="mt-6 max-w-3xl text-4xl font-extrabold tracking-tight text-white sm:text-6xl sm:leading-[1.15]">
@@ -167,8 +240,8 @@ export default function Home() {
 
           <p className="mt-5 max-w-2xl text-base text-zinc-400 sm:text-lg sm:leading-relaxed">
             Katalog micro-interactions, bento components, dan proyek portofolio yang dikurasi oleh{" "}
-            <span className="font-semibold text-white">Aflah</span> sebagai Mahasiswa IT.
-            Setiap elemen siap diuji coba dan di-copy langsung ke proyek nyata.
+            <span className="font-semibold text-white">Aflah Athallah</span> sebagai Mahasiswa Teknik Informatika (Semester 5).
+            Semua elemen siap diuji coba secara interaktif dan di-copy langsung untuk proyek produksi.
           </p>
 
           {/* Quick Install Terminal Bar */}
@@ -203,7 +276,7 @@ export default function Home() {
                 className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/30 transition-all hover:shadow-indigo-600/50"
               >
                 <Zap className="h-4 w-4" />
-                <span>Eksplorasi Komponen</span>
+                <span>Eksplorasi Komponen (6)</span>
               </a>
             </MagneticButton>
 
@@ -213,7 +286,7 @@ export default function Home() {
                 className="flex items-center gap-2 rounded-xl border border-white/10 bg-zinc-900/80 px-6 py-3 text-sm font-semibold text-zinc-300 transition-colors hover:border-white/20 hover:bg-zinc-800 hover:text-white"
               >
                 <FolderGit2 className="h-4 w-4 text-purple-400" />
-                <span>Lihat BentoFlow & Profil</span>
+                <span>Lihat Portofolio & Profil</span>
               </a>
             </MagneticButton>
           </div>
@@ -225,10 +298,11 @@ export default function Home() {
         {/* Interactive Category Filter Tabs */}
         <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
           {[
-            { id: "all", label: "All Components (5)" },
+            { id: "all", label: "All Components (6)" },
             { id: "bento", label: "Bento & Cards (3)" },
             { id: "gestures", label: "Gestures & Dock (2)" },
-            { id: "projects", label: "Featured Projects (BentoFlow)" },
+            { id: "shimmer", label: "Shimmer & Laser (2)" },
+            { id: "projects", label: "Featured Projects (3)" },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -246,7 +320,7 @@ export default function Home() {
 
         {/* COMPONENT 1: SPOTLIGHT BENTO GRID */}
         {(activeCategory === "all" || activeCategory === "bento") && (
-          <section className="space-y-6 mb-16">
+          <section id="spotlight-section" className="space-y-6 mb-16">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-400">
@@ -278,15 +352,13 @@ export default function Home() {
                         : "bg-cyan-500"
                     } ${
                       activeGlow === color
-                        ? "scale-110 ring-2 ring-white/50"
+                        ? "scale-110 ring-2 ring-white/50 shadow-md"
                         : "opacity-60 hover:opacity-100"
                     }`}
                   />
                 ))}
                 <button
-                  onClick={() =>
-                    openCodeModal("Spotlight Bento Card", spotlightCardCode)
-                  }
+                  onClick={() => openCodeModal("spotlight")}
                   className="ml-2 flex items-center gap-1 rounded-lg border border-white/10 bg-zinc-800 px-2.5 py-1 text-xs text-zinc-300 hover:text-white"
                 >
                   <Code2 className="h-3.5 w-3.5" />
@@ -298,14 +370,14 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
               <SpotlightCard
                 title="Fluid Bento Motion"
-                description="Menghitung koordinat pointer relatif terhadap bounding box elemen untuk simulasi cahaya realistis."
+                description="Menghitung koordinat pointer relatif terhadap bounding box elemen untuk simulasi cahaya radial realistis."
                 tag="Interactive"
                 icon={Sparkles}
                 glowColor={activeGlow}
               />
               <SpotlightCard
                 title="Tailwind v4 Optimized"
-                description="Didesain dengan utility CSS modern tanpa JavaScript overhead berlebih untuk performa 60fps."
+                description="Didesain dengan utility CSS modern tanpa JavaScript overhead berlebih untuk menjamin performa 60fps."
                 tag="Performance"
                 icon={Cpu}
                 glowColor={activeGlow}
@@ -323,7 +395,7 @@ export default function Home() {
 
         {/* COMPONENT 2: MAGNETIC INTERACTION PLAYGROUND */}
         {(activeCategory === "all" || activeCategory === "gestures") && (
-          <section className="space-y-6 mb-16">
+          <section id="magnetic-section" className="space-y-6 mb-16">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-400">
@@ -339,9 +411,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() =>
-                  openCodeModal("Magnetic Button Component", magneticButtonCode)
-                }
+                onClick={() => openCodeModal("magnetic")}
                 className="flex items-center gap-1.5 self-start sm:self-auto rounded-lg border border-white/10 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300 hover:text-white"
               >
                 <Code2 className="h-3.5 w-3.5" />
@@ -374,8 +444,8 @@ export default function Home() {
         )}
 
         {/* COMPONENT 3 & 4: FLOATING DOCK & BORDER BEAM */}
-        {(activeCategory === "all" || activeCategory === "gestures" || activeCategory === "bento") && (
-          <section className="space-y-6 mb-16">
+        {(activeCategory === "all" || activeCategory === "gestures" || activeCategory === "bento" || activeCategory === "shimmer") && (
+          <section id="dock-section" className="space-y-6 mb-16">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-pink-400">
@@ -390,21 +460,28 @@ export default function Home() {
                 </p>
               </div>
 
-              <button
-                onClick={() =>
-                  openCodeModal("macOS Floating Dock", floatingDockCode)
-                }
-                className="flex items-center gap-1.5 self-start sm:self-auto rounded-lg border border-white/10 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300 hover:text-white"
-              >
-                <Code2 className="h-3.5 w-3.5" />
-                <span>Get Dock Code</span>
-              </button>
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <button
+                  onClick={() => openCodeModal("dock")}
+                  className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300 hover:text-white"
+                >
+                  <Code2 className="h-3.5 w-3.5" />
+                  <span>Dock Code</span>
+                </button>
+                <button
+                  onClick={() => openCodeModal("borderBeam")}
+                  className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300 hover:text-white"
+                >
+                  <Code2 className="h-3.5 w-3.5" />
+                  <span>Beam Code</span>
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               <div className="flex min-h-[260px] flex-col items-center justify-center gap-4 rounded-2xl border border-white/10 bg-zinc-950/50 p-6 backdrop-blur-xl">
                 <span className="text-xs text-zinc-500 font-mono">
-                  // Hover across the dock items below
+                  // Klik atau arahkan kursor ke ikon dock di bawah
                 </span>
                 <FloatingDock />
               </div>
@@ -412,7 +489,7 @@ export default function Home() {
               <div className="flex flex-col justify-center">
                 <BorderBeamCard
                   title="Continuous Glowing Border Beam"
-                  description="Menggunakan conic gradient dan rotation keyframe murni untuk efek laser neon sinematik ala landing page modern."
+                  description="Menggunakan conic gradient dan rotation keyframe murni untuk efek laser neon sinematik ala landing page SaaS modern."
                   badge="Satisfying"
                 />
               </div>
@@ -420,27 +497,107 @@ export default function Home() {
           </section>
         )}
 
-        {/* COMPONENT 5 & FEATURED PROJECT: BENTOFLOW & CREATOR CARD */}
+        {/* COMPONENT 5: SHIMMER BUTTON & MICRO-INTERACTIONS */}
+        {(activeCategory === "all" || activeCategory === "shimmer" || activeCategory === "gestures") && (
+          <section id="shimmer-section" className="space-y-6 mb-16">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>05. High-Impact Micro-Interactions</span>
+                </div>
+                <h2 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  Shimmer Button & Glow Reflections
+                </h2>
+                <p className="mt-1 text-sm text-zinc-400">
+                  Tombol call-to-action modern dengan efek refleksi cahaya bergerak (shimmer) menggunakan CSS container queries.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                {/* Shimmer Color Switcher */}
+                <div className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-zinc-900/50 p-1.5">
+                  {(["purple", "cyan", "emerald", "amber"] as const).map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setShimmerTheme(color)}
+                      className={`h-5 w-5 rounded-md transition-transform ${
+                        color === "purple"
+                          ? "bg-purple-500"
+                          : color === "cyan"
+                          ? "bg-cyan-500"
+                          : color === "emerald"
+                          ? "bg-emerald-500"
+                          : "bg-amber-500"
+                      } ${
+                        shimmerTheme === color
+                          ? "scale-110 ring-2 ring-white/60"
+                          : "opacity-60 hover:opacity-100"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => openCodeModal("shimmer")}
+                  className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300 hover:text-white"
+                >
+                  <Code2 className="h-3.5 w-3.5" />
+                  <span>Shimmer Code</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="flex min-h-[220px] flex-wrap items-center justify-center gap-6 rounded-2xl border border-white/10 bg-zinc-950/50 p-8 backdrop-blur-xl">
+              <ShimmerButton
+                shimmerColor={shimmerColorMap[shimmerTheme]}
+                shimmerDuration="2.5s"
+              >
+                <Sparkles className="h-4 w-4 text-purple-400" />
+                <span>Exploration Mode</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </ShimmerButton>
+
+              <ShimmerButton
+                shimmerColor="#38bdf8"
+                shimmerDuration="3.5s"
+                borderRadius="14px"
+                className="font-semibold"
+              >
+                <Zap className="h-4 w-4 text-cyan-400 fill-cyan-400" />
+                <span>Launch Interactive Demo</span>
+              </ShimmerButton>
+
+              <ShimmerButton
+                shimmerColor="#34d399"
+                shimmerDuration="2s"
+                className="text-xs"
+              >
+                <span>Live Ready</span>
+              </ShimmerButton>
+            </div>
+          </section>
+        )}
+
+        {/* COMPONENT 6 & FEATURED PROJECTS: 3D PARALLAX & PORTFOLIO SHOWCASE */}
         {(activeCategory === "all" || activeCategory === "projects" || activeCategory === "bento") && (
           <section id="creator-profile" className="space-y-6 pt-6">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">
                   <GraduationCap className="h-4 w-4" />
-                  <span>05. Karya Unggulan & Profil Pembuat</span>
+                  <span>06. Karya Unggulan & Profil Pembuat</span>
                 </div>
                 <h2 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                  Featured Project: BentoFlow
+                  Featured Projects & Creator
                 </h2>
                 <p className="mt-1 text-sm text-zinc-400">
-                  Proyek nyata portofolio mahasiswa IT dengan implementasi 3D Parallax Tilt Card.
+                  Kompilasi proyek portofolio nyata yang telah di-deploy dan dapat diakses langsung.
                 </p>
               </div>
 
               <button
-                onClick={() =>
-                  openCodeModal("3D Parallax Tilt Card", tiltCardCode)
-                }
+                onClick={() => openCodeModal("tilt")}
                 className="flex items-center gap-1.5 self-start sm:self-auto rounded-lg border border-white/10 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300 hover:text-white"
               >
                 <Code2 className="h-3.5 w-3.5" />
@@ -448,63 +605,120 @@ export default function Home() {
               </button>
             </div>
 
+            {/* Grid Showcase of Real Projects */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              {/* Tilt Card 1: BentoFlow Showcase (Spans 2 columns) */}
+              {/* Tilt Card 1: BentoFlow SaaS */}
               <div className="lg:col-span-2">
                 <TiltCard
-                  subtitle="Project Portofolio Utama"
-                  title="BentoFlow — Interactive Workflow Hub"
-                  description="Aplikasi manajemen alur kerja (workflow) dengan tata letak Bento Grid modern, drag-and-drop state, dan navigasi modular yang responsif. Dibangun untuk memberikan pengalaman produktivitas yang rapi dan estetis."
-                  tag="Featured Creation"
+                  subtitle="Featured Project • Next.js 15/16 & AI"
+                  title="BentoFlow — AI-Powered Bento Portfolio Hub"
+                  description="Platform web interaktif untuk menyusun portofolio personal dengan arsitektur Bento Grid modular, drag-and-drop reordering spasial, 5 tema kustom dinamis, serta AI Copilot prompt generator."
+                  tag="Live Production"
+                  href="https://bentoflowaflah.vercel.app"
+                  hrefLabel="Kunjungi bentoflowaflah.vercel.app"
                   stats={[
-                    { label: "Design Pattern", value: "Bento Grid UI" },
-                    { label: "Ecosystem", value: "Next.js & React" },
-                    { label: "Status", value: "Live Portfolio" },
+                    { label: "Architecture", value: "Bento Grid UI" },
+                    { label: "Interactions", value: "dnd-kit Spasial" },
+                    { label: "Deployment", value: "Vercel Live" },
                   ]}
                 />
               </div>
 
               {/* Creator Bio Card */}
-              <div className="flex flex-col justify-between rounded-3xl border border-white/10 bg-gradient-to-b from-zinc-900/80 to-zinc-950 p-6 backdrop-blur-xl">
+              <div className="flex flex-col justify-between rounded-3xl border border-white/10 bg-gradient-to-b from-zinc-900/90 to-zinc-950 p-6 sm:p-7 backdrop-blur-xl">
                 <div>
                   <div className="flex items-center gap-3.5">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 text-lg font-bold text-white shadow-lg shadow-indigo-500/25">
                       A
                     </div>
                     <div>
-                      <h3 className="font-bold text-white">Aflah</h3>
+                      <h3 className="font-bold text-white text-base">Aflah Athallah</h3>
                       <p className="text-xs text-zinc-400">Mahasiswa IT & Creative Coder</p>
                     </div>
                   </div>
 
                   <p className="mt-4 text-xs leading-relaxed text-zinc-400">
-                    Fokus pada eksplorasi antarmuka digital yang interaktif, micro-interactions,
-                    dan *vibe coding*. Menciptakan produk web yang menggabungkan estetika tinggi dan performa mulus.
+                    Mahasiswa S1 Teknik Informatika berdomisili di <span className="text-zinc-200">Cikarang, Bekasi</span>. Fokus mendalami perancangan web modern, arsitektur data bersih, micro-interactions, serta eksplorasi <em>vibe coding</em> dengan AI.
                   </p>
 
                   <div className="mt-5 space-y-2 border-t border-white/10 pt-4 text-xs text-zinc-300">
                     <div className="flex items-center gap-2">
-                      <GraduationCap className="h-4 w-4 text-indigo-400" />
-                      <span>Jurusan Teknologi Informasi</span>
+                      <GraduationCap className="h-4 w-4 text-indigo-400 shrink-0" />
+                      <span>S1 Teknik Informatika (Semester 5)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Briefcase className="h-4 w-4 text-purple-400" />
-                      <span>Terbuka untuk Magang & Project</span>
+                      <MapPin className="h-4 w-4 text-emerald-400 shrink-0" />
+                      <span>Cikarang, Bekasi, Jawa Barat</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Briefcase className="h-4 w-4 text-purple-400 shrink-0" />
+                      <span className="text-emerald-300 font-medium">Terbuka untuk Magang MSIB / Internship</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-6 flex items-center gap-2">
+                <div className="mt-6 flex flex-col gap-2 pt-4 border-t border-white/10">
+                  <div className="grid grid-cols-2 gap-2">
+                    <a
+                      href="https://github.com/Abcdeflahhh"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-2 text-xs font-medium text-zinc-200 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white"
+                    >
+                      <GithubIcon className="h-3.5 w-3.5" />
+                      <span>GitHub</span>
+                    </a>
+                    <a
+                      href="https://linkedin.com/in/aflahtamam68"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-2 text-xs font-medium text-zinc-200 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white"
+                    >
+                      <LinkedinIcon className="h-3.5 w-3.5 text-blue-400" />
+                      <span>LinkedIn</span>
+                    </a>
+                  </div>
+
                   <a
-                    href="https://github.com/Abcdeflahhh"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-zinc-200 transition-colors hover:border-white/20 hover:bg-white/10 hover:text-white"
+                    href="mailto:aflahtamamke2@gmail.com"
+                    className="flex items-center justify-center gap-2 rounded-xl border border-indigo-500/20 bg-indigo-500/10 py-2 text-xs font-medium text-indigo-300 transition-colors hover:border-indigo-500/40 hover:bg-indigo-500/20"
                   >
-                    <GithubIcon className="h-4 w-4" />
-                    <span>GitHub Profile</span>
+                    <Mail className="h-3.5 w-3.5" />
+                    <span>aflahtamamke2@gmail.com</span>
                   </a>
                 </div>
+              </div>
+
+              {/* Project Card 2: ChromaCraft Studio */}
+              <div className="lg:col-span-1">
+                <TiltCard
+                  subtitle="Design Tokens & A11y"
+                  title="ChromaCraft Studio"
+                  description="AI design system & palette playground dengan sintesis mood-to-tokens otomatis, color blindness simulator, dan audit WCAG AAA."
+                  tag="AI Studio"
+                  stats={[
+                    { label: "Engine", value: "Vite + React 19" },
+                    { label: "Audit", value: "WCAG AAA" },
+                    { label: "Export", value: "CSS & Tailwind" },
+                  ]}
+                />
+              </div>
+
+              {/* Project Card 3: UAS Web 2 Project */}
+              <div className="lg:col-span-2">
+                <TiltCard
+                  subtitle="Academic Full-Stack Project • Kuliah Pemweb 2"
+                  title="Aplikasi UAS Pemrograman Web 2"
+                  description="Aplikasi web tugas akhir praktikum yang mengimplementasikan konsep database relasional, CRUD terstruktur, otentikasi, dan deployment cloud modern."
+                  tag="Academic"
+                  href="https://uas-web2-312410280-aflah-athallah.vercel.app"
+                  hrefLabel="Buka uas-web2-312410280-aflah-athallah.vercel.app"
+                  stats={[
+                    { label: "Course", value: "Pemweb 2" },
+                    { label: "Database", value: "Relational DB" },
+                    { label: "Deployment", value: "Vercel Cloud" },
+                  ]}
+                />
               </div>
             </div>
           </section>
@@ -513,7 +727,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-28 border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
           <p>
-            © 2026 CraftUI — Dibuat oleh <span className="text-zinc-300 font-medium">Aflah</span> sebagai portofolio Mahasiswa IT.
+            © 2026 CraftUI — Dibuat oleh <span className="text-zinc-300 font-medium">Aflah Athallah</span> sebagai portofolio Mahasiswa IT.
           </p>
           <div className="flex items-center gap-3">
             <span>Next.js 16</span>
@@ -521,6 +735,8 @@ export default function Home() {
             <span>Tailwind v4</span>
             <span>•</span>
             <span>Framer Motion</span>
+            <span>•</span>
+            <span>TypeScript</span>
           </div>
         </footer>
       </main>
