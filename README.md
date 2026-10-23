@@ -1,11 +1,13 @@
 # ✦ CraftUI — Modern Micro-Interactions & Bento Component Registry
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live_Preview-success?style=for-the-badge&logo=vercel)](https://craft-ui-chi.vercel.app)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.4.2-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19.3.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-14.x-FF0055?style=for-the-badge&logo=framer&logoColor=white)](https://motion.dev/)
 
+> 🌐 **Live Website:** [https://craft-ui-chi.vercel.app](https://craft-ui-chi.vercel.app)  
 > **Crafted by Aflah Athallah** • Mahasiswa S1 Teknik Informatika (Semester 5) • Cikarang, Bekasi, Jawa Barat  
 > Proyek portofolio eksplorasi *Design Engineering*, *Frontend Craftsmanship*, *micro-interactions 60fps*, dan *vibe coding*.
 
